@@ -1,13 +1,13 @@
-package com.tienda.api.dao;
+package com.tienda.api.dto;
 
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Pattern;
 
-public class EmployeesDao {
+public class EmployeesDto {
 
-	private Long employeeId;
+private Long employeeId;
 	
 	private String employeeName;
 	
@@ -169,7 +169,7 @@ public class EmployeesDao {
 		this.employeeType = employeeType;
 	}
 
-	public EmployeesDao(Long employeeId, String employeeName, String employeeLastName, String employeeEmail,
+	public EmployeesDto(Long employeeId, String employeeName, String employeeLastName, String employeeEmail,
 			String employeePhone, LocalTime employeeStartTime, LocalTime employeeEndTime, String employeePosition,
 			String employeeStatus, String employeeType) {
 		super();
@@ -185,7 +185,7 @@ public class EmployeesDao {
 		this.employeeType = employeeType;
 	}
 
-	public EmployeesDao() {
+	public EmployeesDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
