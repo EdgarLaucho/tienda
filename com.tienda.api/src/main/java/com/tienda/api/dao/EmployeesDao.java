@@ -3,6 +3,7 @@ package com.tienda.api.dao;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Pattern;
 
 public class EmployeesDao {
 
@@ -14,6 +15,7 @@ public class EmployeesDao {
 	
 	private String employeeEmail;
 	
+	@Pattern(regexp = "^\\+?[0-9]{10,13}$", message = "Número de teléfono no válido")
 	private String employeePhone;
 
 	private LocalTime employeeStartTime;
