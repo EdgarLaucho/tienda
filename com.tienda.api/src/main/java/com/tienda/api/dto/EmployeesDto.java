@@ -2,9 +2,6 @@ package com.tienda.api.dto;
 
 import java.time.LocalTime;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Pattern;
-
 public class EmployeesDto {
 
 private Long employeeId;
@@ -12,17 +9,11 @@ private Long employeeId;
 	private String employeeName;
 	
 	private String employeeLastName;
-	
-	private String employeeEmail;
-	
-	@Pattern(regexp = "^\\+?[0-9]{10,13}$", message = "Número de teléfono no válido")
-	private String employeePhone;
 
 	private LocalTime employeeStartTime;
 	
 	private LocalTime employeeEndTime;
 	
-	@Column(name = "employee_position")
 	private String employeePosition;
 	
 	private String employeeStatus;
@@ -71,33 +62,8 @@ private Long employeeId;
 		this.employeeLastName = employeeLastName;
 	}
 
-	/**
-	 * @return the employeeEmail
-	 */
-	public String getEmployeeEmail() {
-		return employeeEmail;
-	}
 
-	/**
-	 * @param employeeEmail the employeeEmail to set
-	 */
-	public void setEmployeeEmail(String employeeEmail) {
-		this.employeeEmail = employeeEmail;
-	}
 
-	/**
-	 * @return the employeePhone
-	 */
-	public String getEmployeePhone() {
-		return employeePhone;
-	}
-
-	/**
-	 * @param employeePhone the employeePhone to set
-	 */
-	public void setEmployeePhone(String employeePhone) {
-		this.employeePhone = employeePhone;
-	}
 
 	/**
 	 * @return the employeeStartTime
@@ -169,15 +135,12 @@ private Long employeeId;
 		this.employeeType = employeeType;
 	}
 
-	public EmployeesDto(Long employeeId, String employeeName, String employeeLastName, String employeeEmail,
-			String employeePhone, LocalTime employeeStartTime, LocalTime employeeEndTime, String employeePosition,
+	public EmployeesDto(String employeeName, String employeeLastName,
+			LocalTime employeeStartTime, LocalTime employeeEndTime, String employeePosition,
 			String employeeStatus, String employeeType) {
 		super();
-		this.employeeId = employeeId;
 		this.employeeName = employeeName;
 		this.employeeLastName = employeeLastName;
-		this.employeeEmail = employeeEmail;
-		this.employeePhone = employeePhone;
 		this.employeeStartTime = employeeStartTime;
 		this.employeeEndTime = employeeEndTime;
 		this.employeePosition = employeePosition;
@@ -187,6 +150,6 @@ private Long employeeId;
 
 	public EmployeesDto() {
 		super();
-		// TODO Auto-generated constructor stub
+	
 	}
 }

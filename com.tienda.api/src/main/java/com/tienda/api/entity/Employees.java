@@ -27,13 +27,6 @@ public class Employees {
 	@Column(name = "employee_last_name", length = 45)
 	private String employeeLastName;
 	
-	@Column(name = "employee_email",length = 80)
-	private String employeeEmail;
-	
-	@Column(name = "employee_phone")
-	private String employeePhone;
-
-	
 	@Column(name = "employee_start_time")
 	private LocalTime employeeStartTime;
 	
@@ -91,33 +84,9 @@ public class Employees {
 		this.employeeLastName = employeeLastName;
 	}
 
-	/**
-	 * @return the employeeEmail
-	 */
-	public String getEmployeeEmail() {
-		return employeeEmail;
-	}
 
-	/**
-	 * @param employeeEmail the employeeEmail to set
-	 */
-	public void setEmployeeEmail(String employeeEmail) {
-		this.employeeEmail = employeeEmail;
-	}
 
-	/**
-	 * @return the employeePhone
-	 */
-	public String getEmployeePhone() {
-		return employeePhone;
-	}
 
-	/**
-	 * @param employeePhone the employeePhone to set
-	 */
-	public void setEmployeePhone(String employeePhone) {
-		this.employeePhone = employeePhone;
-	}
 
 	/**
 	 * @return the employeeStartTime
@@ -189,15 +158,12 @@ public class Employees {
 		this.employeeType = employeeType;
 	}
 
-	public Employees(Long employeeId, String employeeName, String employeeLastName, String employeeEmail,
-			String employeePhone, LocalTime employeeStartTime, LocalTime employeeEndTime, String employeePosition,
+	public Employees(String employeeName, String employeeLastName, LocalTime employeeStartTime,
+			LocalTime employeeEndTime, String employeePosition,
 			String employeeStatus, String employeeType) {
 		super();
-		this.employeeId = employeeId;
 		this.employeeName = employeeName;
 		this.employeeLastName = employeeLastName;
-		this.employeeEmail = employeeEmail;
-		this.employeePhone = employeePhone;
 		this.employeeStartTime = employeeStartTime;
 		this.employeeEndTime = employeeEndTime;
 		this.employeePosition = employeePosition;
@@ -207,7 +173,7 @@ public class Employees {
 
 	public Employees() {
 		super();
-		// TODO Auto-generated constructor stub
+	
 	}
 	
 	

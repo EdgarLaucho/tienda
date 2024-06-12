@@ -2,7 +2,7 @@ package com.tienda.api.response;
 
 public class Response {
 
-	public Response(String menssage) {
+	public Response(String message) {
 		super();
 		this.message=message;
 	}
@@ -37,6 +37,4 @@ public class Response {
 		builder.append("]");
 		return builder.toString();
 	}
-
-	
 }
