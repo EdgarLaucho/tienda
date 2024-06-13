@@ -3,11 +3,14 @@ package com.tienda.api.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
 import org.h2.command.dml.MergeUsing.When;
@@ -20,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tienda.api.dto.CustomersDto;
 import com.tienda.api.entity.Customers;
+import com.tienda.api.exception.NotFoundException;
 import com.tienda.api.repository.CustomersRepository;
 import com.tienda.api.service.implement.CustomersServiceImple;
 
@@ -54,7 +58,7 @@ public class CustomersServiceImpleTest {
 	}
 	
 	@Test
-	void findAllCustomers() {
+	void customersFindAll() {
 	    // Configurar el comportamiento del mock del repositorio de clientes
 	    when(customersRepository.findAll()).thenReturn(Arrays.asList(customers));
 
@@ -76,11 +80,41 @@ public class CustomersServiceImpleTest {
 	}
 	
 	@Test
-	void saveCustomers() throws BadRequestException {
+	void customerSave() throws BadRequestException {
+		
+		CustomersDto customersDto= new CustomersDto();
+		customersDto.setCustomerId(1L);
+		customersDto.setCustomersName("Edgar");
+		customersDto.setCustomerLastName("Laucho");
+		customersDto.setCustomerBalance(new BigDecimal("5000.00"));
+		
 		when(customersRepository.save(any(Customers.class))).thenReturn(customers);
 		
-		assertNotNull(customersServiceImple.save(new CustomersDto()));
+		CustomersDto result = customersServiceImple.save(customersDto);
+		assertNotNull(result);
 		
+		assertEquals("EDGAR", result.getCustomersName());
+		assertEquals("LAUCHO", result.getCustomerLastName());
+		assertEquals(1L, result.getCustomerId());
+		assertEquals(new BigDecimal("5000.00"),result.getCustomerBalance());
+		
+		verify(customersRepository, times(1)).save(any(Customers.class));
+		
+	}
+	
+	@Test
+	void customerFindById() throws NotFoundException, BadRequestException {
+		 
+		when(customersRepository.findById(1L)).thenReturn(Optional.of(customers));
+
+		CustomersDto result = customersServiceImple.findById(1L);
+		assertNotNull(result);
+		
+		assertEquals(1L, result.getCustomerId());	
+	}
+	
+	@Test
+	void customerUpdate() {
 		
 	}
 

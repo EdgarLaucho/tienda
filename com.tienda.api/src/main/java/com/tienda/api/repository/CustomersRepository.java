@@ -12,6 +12,6 @@ import com.tienda.api.entity.Customers;
 @Repository
 public interface CustomersRepository extends JpaRepository<Customers, Long> {
 	
-	
+	boolean customerExist(String customersName, String customerLastName);
 
 }

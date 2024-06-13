@@ -12,7 +12,7 @@ public interface CustomersService {
 
 	List<CustomersDto> findAll() throws NotFoundException;
 	CustomersDto save(CustomersDto custumersDto) throws BadRequestException;
-	CustomersDto findById(Long id);
-	CustomersDto update(CustomersDto customersDto);
+	CustomersDto findById(Long id) throws NotFoundException, BadRequestException;
+	CustomersDto update(CustomersDto customersDto)throws NotFoundException,BadRequestException;
 	void deleteById(Long id);
 }
