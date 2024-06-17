@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
-import org.h2.command.dml.MergeUsing.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,9 +45,16 @@ public class CustomersServiceImpleTest {
 	private CustomersServiceImple customersServiceImple;
 	
 	private Customers customers;
+	private CustomersDto customersDto;
 	
 	@BeforeEach
 	public void setUp() {
+		
+		customersDto = new CustomersDto();
+        customersDto.setCustomerId(1L);
+        customersDto.setCustomersName("Edgar");
+        customersDto.setCustomerLastName("Laucho");
+        customersDto.setCustomerBalance(new BigDecimal("5000.00"));
 		
 		customers = new Customers();
 		customers.setCustomersName("Edgar");
@@ -114,8 +120,36 @@ public class CustomersServiceImpleTest {
 	}
 	
 	@Test
-	void customerUpdate() {
+	void customerUpdate() throws NotFoundException, BadRequestException {
+		when(customersRepository.findById(customersDto.getCustomerId())).thenReturn(Optional.of(customers));
+        when(customersRepository.save(customers)).thenReturn(customers);
 		
+		
+		customersDto.setCustomersName("Juan");
+		customersDto.setCustomerLastName("Perez");
+		customersDto.setCustomerBalance(new BigDecimal("6000.00"));
+		
+		CustomersDto result= customersServiceImple.update(customersDto);
+		
+		assertNotNull(result);
+		
+		assertEquals(customersDto.getCustomerId(), result.getCustomerId());
+		assertEquals("JUAN", customers.getCustomersName());
+		assertEquals("PEREZ", customers.getCustomerLastName());
+		assertEquals(new BigDecimal("6000.00"), customers.getCustomerBalance());
+		
+		verify(customersRepository, times(1)).findById(customersDto.getCustomerId());
+		verify(customersRepository, times(1)).save(customers);
+		
+	}
+	
+	@Test
+	void customerDelete() {
+		when(customersRepository.findById(customersDto.getCustomerId())).thenReturn(Optional.of(customers));
+		customersServiceImple.deleteById(customers.getCustomerId());
+		
+		verify(customersRepository, times(1)).findById(customers.getCustomerId());
+		verify(customersRepository, times(1)).delete(customers);
 	}
 
 

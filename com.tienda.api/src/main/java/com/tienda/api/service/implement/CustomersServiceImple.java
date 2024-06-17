@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -100,7 +102,7 @@ public class CustomersServiceImple implements CustomersService {
 	        if (logger.isErrorEnabled()) {
 	            logger.error("Error desconocido en save");
 	        }
-	        throw new RuntimeException("Error desconocido" + e); 
+	        throw e;
 	    }
 	}
 
@@ -179,9 +181,44 @@ public class CustomersServiceImple implements CustomersService {
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public String deleteById(Long id) throws NotFoundException{
+		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Entrando en el metodo deleteById de la clase CustomersServiceImple");
+			}
+			Optional<Customers> customer= customersRepository.findById(id);
+			if (customer.isEmpty()) {
+				if (logger.isErrorEnabled()) {
+					logger.error(String.format("Identificador no encontrado: %s", id));
+				}
+				throw new NotFoundException("El cliente a eliminar no existe: " + id);
+			}else {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Cliente eliminado exitosamente");
+				}
+				return "Cliente eliminado";
+			}
+			
+		}catch (NotFoundException a) {
+			throw a;
+		} catch (Exception e) {
+			if (logger.isErrorEnabled()) {
+				logger.error("Error desconocido");
+			}
+			throw e;
+		}
 	}
 
+	
+	@Override
+	public ResponseEntity<InputStreamResource> customersGenerateReport() throws NotFoundException {
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
 	
 	/**
 	 * Metodo convertidos lista entidad a lista dto
@@ -237,7 +274,7 @@ public class CustomersServiceImple implements CustomersService {
 		if (!customerUpdate.getCustomersName().equals(customersDto.getCustomersName())
 				|| !customerUpdate.getCustomerLastName().equals(customersDto.getCustomerLastName())) {
 			this.customerExists(customersDto);
-			customerUpdate.setCustomersName(customersDto.getCustomerLastName());
+			customerUpdate.setCustomersName(customersDto.getCustomersName());
 			customerUpdate.setCustomerLastName(customersDto.getCustomerLastName());
 			customerUpdate.setCustomerBalance(customersDto.getCustomerBalance());
 			customersRepository.save(customerUpdate);
@@ -270,4 +307,6 @@ public class CustomersServiceImple implements CustomersService {
 		}
 		throw  new BadRequestException("El identificador no puede estar vacio");
 	}
+
+	
 }
