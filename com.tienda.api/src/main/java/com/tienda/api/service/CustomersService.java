@@ -17,6 +17,6 @@ public interface CustomersService {
 	CustomersDto findById(Long id) throws NotFoundException, BadRequestException;
 	CustomersDto update(CustomersDto customersDto)throws NotFoundException,BadRequestException;
     String deleteById(Long id) throws NotFoundException;
-    ResponseEntity<InputStreamResource> customersGenerateReport() throws NotFoundException;
+    ResponseEntity<InputStreamResource> customersGenerateReport();
 }
 	

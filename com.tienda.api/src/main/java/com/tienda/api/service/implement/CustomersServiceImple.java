@@ -1,12 +1,20 @@
 package com.tienda.api.service.implement;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +25,13 @@ import com.tienda.api.exception.ExistsException;
 import com.tienda.api.exception.NotFoundException;
 import com.tienda.api.repository.CustomersRepository;
 import com.tienda.api.service.CustomersService;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 
 @Service
 public class CustomersServiceImple implements CustomersService {
@@ -211,13 +226,63 @@ public class CustomersServiceImple implements CustomersService {
 
 	
 	@Override
-	public ResponseEntity<InputStreamResource> customersGenerateReport() throws NotFoundException {
+	public ResponseEntity<InputStreamResource> customersGenerateReport() {
 		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Entrando al metodo customersGenerateReport de la clase customersServiceImple");
+			}
+			InputStream inputStream= getClass().getResourceAsStream("/Customers.jrxml");
+			JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+			
+			//Preparando el arreglo para pasarlos a jasperReport
+			List<Customers> customers = customersRepository.findAll();
+			Customers[] customersArray= customers.toArray(new Customers[customers.size()]);
+			Customers[] customersReport = new Customers[customersArray.length+1];
+			
+			Customers solution= new Customers();
+			solution.setCustomerId(null);
+			solution.setCustomersName("----");
+			solution.setCustomerLastName("-----");
+			solution.setCustomerBalance(new BigDecimal(0000));
+			
+			customersReport[0]= solution;
+			
+			for (int i =0; i<customersArray.length; i++) {
+				customersReport[i+1]=customersArray[i];
+				
+			}
+			
+			JRBeanArrayDataSource dataSource= new JRBeanArrayDataSource(customersReport);
+			
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put("tabla", dataSource);
+			
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,dataSource);
+			
+			//exportar el reporte a un arra de bytes
+			
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
+			
+			
+			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+			
+			HttpHeaders headers = new HttpHeaders();
+			return ResponseEntity.
+					ok().
+					headers(headers).
+					contentType(MediaType.APPLICATION_PDF).
+					body(new InputStreamResource(byteArrayInputStream));
+			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			if (logger.isErrorEnabled()) {
+				logger.error("Error al generar el pdf");
+			}
+			e.printStackTrace();
+		 return ResponseEntity.status(500).body(null);
 		}
-		return null;
+		
 	}
 	
 	/**
@@ -251,7 +316,7 @@ public class CustomersServiceImple implements CustomersService {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Entrando en el metodo customerExist de la clase CustomersServiceImple");
 		}
-		return customersRepository.customerExist(customersName, customerLastName );
+		return customersRepository.existsByCustomersNameAndCustomerLastName(customersName, customerLastName );
 	}
 	
 
