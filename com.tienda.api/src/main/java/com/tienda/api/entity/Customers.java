@@ -17,13 +17,13 @@ public class Customers {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "customer_id")
 	private Long customerId;
-	
+
 	@Column(name = "customer_name")
 	private String customersName;
-	
+
 	@Column(name = "customer_last_name")
 	private String customerLastName;
-	
+
 	@Column(name = "customer_balance")
 	private BigDecimal customerBalance;
 
@@ -33,6 +33,7 @@ public class Customers {
 	public Long getCustomerId() {
 		return customerId;
 	}
+	
 
 	/**
 	 * @param customerId the customerId to set
@@ -93,9 +94,7 @@ public class Customers {
 
 	public Customers() {
 		super();
-		
+
 	}
-	
-	
-	
+
 }

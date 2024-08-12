@@ -105,7 +105,7 @@ public class EmployeesServiceImple  implements EmployeesService{
 		try {
 			
 		} catch (Exception e) {
-
+			throw e;
 		}
 		return null;
 	}

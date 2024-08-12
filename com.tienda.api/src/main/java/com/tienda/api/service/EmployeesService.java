@@ -3,7 +3,6 @@ package com.tienda.api.service;
 import java.util.List;
 
 import com.tienda.api.dto.EmployeesDto;
-import com.tienda.api.entity.Employees;
 import com.tienda.api.exception.NotFoundException;
 
 public interface EmployeesService {

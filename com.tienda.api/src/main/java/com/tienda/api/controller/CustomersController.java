@@ -3,7 +3,6 @@ package com.tienda.api.controller;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +26,7 @@ public class CustomersController {
 
 	private final CustomersService customersService;
 
-    @Autowired
+    
     public CustomersController(CustomersService customersService) {
         this.customersService = customersService;
     }
@@ -37,7 +36,7 @@ public class CustomersController {
 		return customersService.findAll();
 	}
 	
-	@GetMapping("/busqueda/{id}")
+	@GetMapping("/busqueda")
 	public CustomersDto findByid(@PathVariable CustomersDto customersDto) throws NotFoundException, BadRequestException {
 		return customersService.findById(customersDto.getCustomerId());
 	}

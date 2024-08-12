@@ -29,7 +29,7 @@ import com.tienda.api.service.implement.CustomersServiceImple;
 import ch.qos.logback.classic.Logger;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomersServiceImpleTest {
+ class CustomersServiceImpleTest {
 	
 	
 	/**
@@ -78,21 +78,21 @@ public class CustomersServiceImpleTest {
 	    assertEquals(1, customersDtoList.size());
 
 	    // Verificar el contenido de la lista
-	    CustomersDto customersDto = customersDtoList.get(0);
-	    assertEquals(1L, customersDto.getCustomerId());
-	    assertEquals("EDGAR", customersDto.getCustomersName());
-	    assertEquals("LAUCHO", customersDto.getCustomerLastName());
-	    assertEquals(new BigDecimal("5000.00"), customersDto.getCustomerBalance());
+	    CustomersDto customersDtoNew = customersDtoList.get(0);
+	    assertEquals(1L, customersDtoNew.getCustomerId());
+	    assertEquals("EDGAR", customersDtoNew.getCustomersName());
+	    assertEquals("LAUCHO", customersDtoNew.getCustomerLastName());
+	    assertEquals(new BigDecimal("5000.00"), customersDtoNew.getCustomerBalance());
 	}
 	
 	@Test
 	void customerSave() throws BadRequestException {
 		
-		CustomersDto customersDto= new CustomersDto();
-		customersDto.setCustomerId(1L);
-		customersDto.setCustomersName("Edgar");
-		customersDto.setCustomerLastName("Laucho");
-		customersDto.setCustomerBalance(new BigDecimal("5000.00"));
+		CustomersDto customersDtonew= new CustomersDto();
+		customersDtonew.setCustomerId(1L);
+		customersDtonew.setCustomersName("Edgar");
+		customersDtonew.setCustomerLastName("Laucho");
+		customersDtonew.setCustomerBalance(new BigDecimal("5000.00"));
 		
 		when(customersRepository.save(any(Customers.class))).thenReturn(customers);
 		
