@@ -138,8 +138,8 @@ public class CustomersServiceImple implements CustomersService {
 			
 			Optional<Customers> customer = customersRepository.findById(id);
 			if (customer.isEmpty()) {
-				if (logger.isErrorEnabled()) {
-					logger.error(String.format("El identificador del cliente no existe %s", id));
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("El identificador del cliente no existe %s", id));
 				}
 				throw new NotFoundException("El identificador del cliente no existe");
 			}else {
@@ -149,12 +149,10 @@ public class CustomersServiceImple implements CustomersService {
 			}
 			return convertEntityToDTO(customer.get());
 			
-		}catch (NotFoundException a) {
+		}catch (NotFoundException | BadRequestException a) {
 			throw a;
-		}catch (BadRequestException e) {
+		} catch (Exception e) {
 			throw e;
-		} catch (Exception i) {
-			throw i;
 		}
 		
 	}

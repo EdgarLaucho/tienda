@@ -86,6 +86,15 @@ public class ProductDto {
 		builder.append("]");
 		return builder.toString();
 	}
+
+	public ProductDto(Long productId, @NotBlank String productName, @NotNull Double productPrice,
+			@NotNull int productQuantity) {
+		super();
+		this.productId = productId;
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.productQuantity = productQuantity;
+	}
 	
 	
 	

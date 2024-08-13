@@ -1,6 +1,7 @@
 package com.tienda.api.service.implement;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
@@ -10,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tienda.api.dto.CustomersDto;
 import com.tienda.api.dto.ProductDto;
+import com.tienda.api.entity.Customers;
 import com.tienda.api.entity.Product;
 import com.tienda.api.exception.ExistsException;
 import com.tienda.api.exception.NotFoundException;
@@ -102,15 +105,54 @@ public class ProductServiceImple implements ProductService {
 			if (id == null) {
 				fieldValidationId();
 			}
+			
+			Optional<Product> product = productRepository.findById(id);
+			
+			if (product.isEmpty()) {
+				if (logger.isDebugEnabled()) {
+					
+					logger.debug(String.format("El identificador del producto no existe %s", id));
+				}
+				
+			throw new NotFoundException("El identificador del producto no existe");
+			
+			}else {
+				
+				if (logger.isDebugEnabled()) {
+					
+					logger.debug("Producto encontrado");
+				}
+			}
+			return convertEntityToDTO(product.get());
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw e;
 		}
-		return null;
+		
 	}
 
 	@Override
 	public ProductDto update(ProductDto productDto) throws NotFoundException, BadRequestException {
-		// TODO Auto-generated method stub
+		if (logger.isDebugEnabled()) {
+			logger.debug("Entrando en el metodo update de la clase ProductServiceImple");
+		}
+		try {
+			
+			if (productDto ==null) {
+				fieldValidation();
+			}
+			
+			if (productDto.getProductId() == null) {
+				fieldValidationId();
+			}
+			
+			Optional<Product> product = productRepository.findById(productDto.getProductId());
+			if (product.isPresent()) {
+				Product productUpdate = product.get();
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 
@@ -159,7 +201,7 @@ public class ProductServiceImple implements ProductService {
 
 	private boolean productExist(String productName) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Entrando en el metodo customerExist de la clase CustomersServiceImple");
+			logger.debug("Entrando en el metodo productExist de la clase ProductServiceImple");
 		}
 		return productRepository.existsByProductName(productName);
 	}
@@ -174,4 +216,32 @@ public class ProductServiceImple implements ProductService {
 		}
 		throw  new BadRequestException("El identificador no puede estar vacio");
 	}
+	
+	/**
+	 * Metodo Validacion de que los campos no esten vacios
+	 * @throws BadRequestException
+	 */
+	private void fieldValidation() throws BadRequestException {
+		if (logger.isErrorEnabled()) {
+			logger.error("No hay datos");
+		}
+		throw new BadRequestException("Los datos estan vacios");
+	}
+	
+	/**
+	 * Metodo Actualizacion de producto
+	 */
+	private void productUpdate(ProductDto productDto, Product productUpdate) {
+		//si hay cambios se verifica si el producto ya existe
+		if (!productUpdate.getProductName().equals(productDto.getProductName()));
+			productUpdate.setProductName(productDto.getProductName());
+			productUpdate.setProductPrice(productDto.getProductPrice());
+			productUpdate.setProductQuantity(productDto.getProductQuantity());
+			productRepository.save(productUpdate);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Cliente actualizado");
+			}
+	}
+		
+	
 }
